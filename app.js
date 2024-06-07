@@ -142,7 +142,10 @@ async function run() {
 
     // User login
     app.post("/login", passport.authenticate("local"), (req, res) => {
-      res.json({ message: "Logged in successfully" });
+      res.json({
+        message: "Logged in successfully",
+        username: req.user.username,
+      });
     });
 
     // Logout
