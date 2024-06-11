@@ -9,13 +9,13 @@ import LocalStrategy from "passport-local";
 import session from "express-session";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
-import crypto from "crypto";
 
 dotenv.config();
 
 const PORT = process.env.PORT;
 const SECRET_KEY = process.env.SESSION_SECRET;
 const uri = process.env.URI;
+const frontendUrl = process.env.FRONTEND_URL;
 
 const app = express();
 
@@ -23,7 +23,7 @@ const app = express();
 //app.use(cors());
 app.use(
   cors({
-    origin: "http://localhost:5173", // Replace with your client app's URL
+    origin: frontendUrl, // Replace with your client app's URL
     credentials: true, // Enable credentials (cookies) in CORS
   })
 );
