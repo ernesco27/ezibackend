@@ -1,5 +1,6 @@
 import { sendSMS } from "./smsService.js";
 import { sendEmail } from "./emailService.js";
+import { sendContactEmail } from "./emailService.js";
 
 import express from "express";
 import { MongoClient, ServerApiVersion, ObjectId } from "mongodb";
@@ -15,7 +16,8 @@ dotenv.config();
 const PORT = process.env.PORT;
 const SECRET_KEY = process.env.SESSION_SECRET;
 const uri = process.env.URI;
-const frontendUrl = process.env.FRONTEND_URL;
+//const frontendUrl = process.env.FRONTEND_URL;
+const frontendUrl = "http://localhost:5173";
 
 const app = express();
 
@@ -272,6 +274,20 @@ async function run() {
       res.json({ insertedId: result.insertedId });
     } catch (error) {
       console.error("Error creating order:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  // Create a new contact mail
+  app.post("/api/contact", async (req, res) => {
+    try {
+      const { firstName, lastName, email, phoneNumber, message } = req.body;
+
+      await sendContactEmail(firstName, lastName, email, phoneNumber, message); //send Email to admin when order is received
+
+      res.json();
+    } catch (error) {
+      console.error("Error sending contact mail:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   });
