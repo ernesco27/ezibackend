@@ -3,6 +3,7 @@ import { sendEmail } from "./emailService.js";
 import { sendContactEmail } from "./emailService.js";
 
 import express from "express";
+import axios from "axios";
 import { MongoClient, ServerApiVersion, ObjectId } from "mongodb";
 import cors from "cors";
 import passport from "passport";
@@ -122,6 +123,93 @@ async function run() {
     });
 
     // Handle database operations within routes
+
+    //Get E-credit balance
+    app.get("/api/eBalance", async (req, res) => {
+      const apiEndpoint = "https://tppgh.myone4all.com/api/TopUpApi/balance";
+
+      // const { network } = req.body;
+
+      // const params = {
+      //   network,
+      // };
+
+      const headers = {
+        ApiKey: process.env.TPPGH_API,
+        ApiSecret: process.env.TPPGH_SECRET,
+      };
+
+      try {
+        const response = await axios.get(apiEndpoint, {
+          // params,
+          headers,
+        });
+        res.json(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        res.status(500).json({ error: "Internal server error" });
+      }
+    });
+
+    //Data bundle topup
+    app.post("/api/dataBundle", async (req, res) => {
+      const { retailer, recipient, data_code, network, trxn } = req.body;
+
+      const apiEndpoint = "https://tppgh.myone4all.com/api/TopUpApi/dataBundle";
+
+      const params = {
+        retailer,
+        recipient,
+        data_code,
+        network,
+        trxn,
+      };
+
+      const headers = {
+        ApiKey: process.env.TPPGH_API,
+        ApiSecret: process.env.TPPGH_SECRET,
+      };
+
+      try {
+        const response = await axios.get(apiEndpoint, {
+          params,
+          headers,
+        });
+        res.json(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        res.status(500).json({ error: "Internal server error" });
+      }
+    });
+
+    //Get Bundle List
+
+    app.get("/api/dataBundleList", async (req, res) => {
+      const apiEndpoint =
+        "https://tppgh.myone4all.com/api/TopUpApi/dataBundleList";
+
+      const { network } = req.body;
+
+      const params = {
+        network,
+      };
+
+      const headers = {
+        ApiKey: process.env.TPPGH_API,
+        ApiSecret: process.env.TPPGH_SECRET,
+      };
+
+      try {
+        const response = await axios.get(apiEndpoint, {
+          params,
+          headers,
+        });
+        res.json(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        res.status(500).json({ error: "Internal server error" });
+      }
+    });
 
     // User registration
     app.post("/register", async (req, res) => {
