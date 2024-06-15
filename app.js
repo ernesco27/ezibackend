@@ -17,8 +17,8 @@ dotenv.config();
 const PORT = process.env.PORT;
 const SECRET_KEY = process.env.SESSION_SECRET;
 const uri = process.env.URI;
-//const frontendUrl = process.env.FRONTEND_URL;
-const frontendUrl = "http://localhost:5173";
+const frontendUrl = process.env.FRONTEND_URL;
+//const frontendUrl = "http://localhost:5173";
 
 const app = express();
 
